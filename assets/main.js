@@ -270,12 +270,12 @@
     var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     var idx = 0;
     var timer = null;
-    var hovered = false;
     var visible = !('IntersectionObserver' in window);
 
     function scheduleRotation() {
       clearTimeout(timer);
-      if (hovered || hs.matches(':focus-within') || !visible || document.hidden || motion.matches) return;
+      // 鼠标停在画面上仍可观看轮播；键盘阅读链接时保留当前画面。
+      if (hs.querySelector('a:focus-visible') || !visible || document.hidden || motion.matches) return;
       timer = setTimeout(function () { go(idx + 1, false); }, 6000);
     }
 
@@ -305,15 +305,6 @@
 
     hs.addEventListener('focusin', scheduleRotation);
     hs.addEventListener('focusout', function () { requestAnimationFrame(scheduleRotation); });
-    hs.addEventListener('pointerenter', function (e) {
-      if (e.pointerType !== 'mouse') return;
-      hovered = true;
-      scheduleRotation();
-    });
-    hs.addEventListener('pointerleave', function () {
-      hovered = false;
-      scheduleRotation();
-    });
     if ('IntersectionObserver' in window) {
       var rotationObserver = new IntersectionObserver(function (entries) {
         visible = entries[0].intersectionRatio >= .5;
