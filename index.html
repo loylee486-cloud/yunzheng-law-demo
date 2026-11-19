@@ -21,12 +21,12 @@
   "@graph": [
     {
       "@type": "LegalService",
-      "@id": "https://www.cloudguardlaw.com/#org",
+      "@id": "https://loylee486-cloud.github.io/yunzheng-law-demo/#org",
       "name": "浙江云拯律师事务所",
       "alternateName": "ZHEJIANG YUNZHENG LAW FIRM",
-      "url": "https://www.cloudguardlaw.com/",
-      "logo": "https://www.cloudguardlaw.com/assets/logo.png",
-      "image": "https://www.cloudguardlaw.com/assets/logo.png",
+      "url": "https://loylee486-cloud.github.io/yunzheng-law-demo/",
+      "logo": "https://loylee486-cloud.github.io/yunzheng-law-demo/assets/logo.png",
+      "image": "https://loylee486-cloud.github.io/yunzheng-law-demo/assets/logo.png",
       "description": "深耕互联网与网络交易领域的律师事务所，主营舆情维权、知识产权维权、债权追索与平台应诉法律服务。",
       "address": {
         "@type": "PostalAddress",
@@ -58,18 +58,18 @@
     },
     {
       "@type": "WebSite",
-      "@id": "https://www.cloudguardlaw.com/#site",
-      "url": "https://www.cloudguardlaw.com/",
+      "@id": "https://loylee486-cloud.github.io/yunzheng-law-demo/#site",
+      "url": "https://loylee486-cloud.github.io/yunzheng-law-demo/",
       "name": "浙江云拯律师事务所",
       "publisher": {
-        "@id": "https://www.cloudguardlaw.com/#org"
+        "@id": "https://loylee486-cloud.github.io/yunzheng-law-demo/#org"
       },
       "inLanguage": "zh-CN"
     }
   ]
 }
 </script>
-<link rel="stylesheet" href="assets/interactions.css?v=11">
+<link rel="stylesheet" href="assets/interactions.css?v=16">
 <link rel="stylesheet" href="assets/refinement.css?v=2">
 </head>
 <body>
@@ -115,7 +115,7 @@
 </header>
 
 
-<section class="hs" id="heroSlider" role="region" aria-roledescription="carousel" aria-label="云拯律师事务所首页轮播">
+<section class="hs" id="heroSlider" role="region" aria-roledescription="carousel" aria-label="云拯律师事务所首页轮播" tabindex="0">
   <div class="hs-track">
 
     <article class="hs-slide is-active" id="scene-network" role="group" aria-roledescription="场景" aria-label="网络侵权">
@@ -171,10 +171,10 @@
 
   </div>
 
-  <button type="button" class="hs-edge hs-edge-prev" aria-label="上一个场景"></button>
-  <button type="button" class="hs-edge hs-edge-next" aria-label="下一个场景"></button>
   <span class="hs-status" role="status"></span>
-  <a class="hs-read" href="#home-intro">向下阅读 <span aria-hidden="true">↓</span></a>
+  <div class="hs-utilities">
+    <a class="hs-read" href="#home-intro">向下阅读 <span aria-hidden="true">↓</span></a>
+  </div>
 </section>
 
 <section class="stmt no-wnum" id="home-intro">
@@ -186,44 +186,88 @@
       </div>
       <div class="stmt-side">
         <p>平台规则、扩散速度、证据易灭失——网络争议的节奏和传统业务差别很大，是我们目前办案最集中的一类。</p>
-        <div class="stmt-keys"><span>先固定证据</span><span>再判断路径</span><span>过程可复盘</span></div>
+        <div class="stmt-method">
+          <details name="home-method" open>
+            <summary>先固定证据</summary>
+            <p>先梳理原始链接、发布时间和相关材料，尽量把事情经过记录完整。</p>
+          </details>
+          <details name="home-method">
+            <summary>再判断路径</summary>
+            <p>律师结合事实、证据和平台规则，判断适合投诉、协商还是进入诉讼程序。</p>
+          </details>
+          <details name="home-method">
+            <summary>过程可复盘</summary>
+            <p>把已经采取的动作、收到的反馈和下一步安排整理在同一条时间线上。</p>
+          </details>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="focus no-wnum" id="home-practice">
+<section class="practice-chapters" id="home-practice" aria-labelledby="practice-chapters-title">
   <div class="wrap">
     <div class="focus-top">
       <div>
         <span class="eyebrow-sm">Practice areas</span>
-        <h2>主要方向</h2>
+        <h2 id="practice-chapters-title">主要方向</h2>
       </div>
       <a class="focus-all" href="practice.html">业务领域总览<i>→</i></a>
     </div>
-    <div class="focus-grid">
-      <div class="focus-list">
-        <a href="practice-yuqing.html" class="fl on" data-f="0">
-          <b>舆情维权</b><em>内容还没被删、证据还没丢的那几天</em>
-        </a>
-        <a href="practice-ip.html" class="fl" data-f="1">
-          <b>知识产权维权</b><em>同类侵权能不能一次性收口</em>
-        </a>
-        <a href="practice-zhaiquan.html" class="fl" data-f="2">
-          <b>债权追索</b><em>判决拿得到，钱收不收得回</em>
-        </a>
-        <a href="practice-platform.html" class="fl" data-f="3">
-          <b>平台应诉法律服务</b><em>把个案沉淀成可复用的口径</em>
-        </a>
-      </div>
-      <div class="focus-stage" aria-hidden="true">
-        <figure class="fs on" data-f="0"><img src="assets/img/editorial-20261118/band-night.jpg" alt="无人数字化法律研究办公区场景示意" loading="lazy"></figure>
-        <figure class="fs" data-f="1"><img src="assets/img/band-desk.jpg" alt="桌上的案卷与证据材料" loading="lazy"></figure>
-        <figure class="fs" data-f="2"><img src="assets/img/ph-zhaiquan.jpg" alt="债权案件卷宗" loading="lazy"></figure>
-        <figure class="fs" data-f="3"><img src="assets/img/band-meet.jpg" alt="会议桌上的案卷材料" loading="lazy"></figure>
-        <div class="focus-caption" aria-hidden="true">舆情维权</div>
+  </div>
+  <nav class="practice-index wrap" aria-label="主要方向章节">
+    <a href="#home-yuqing">舆情维权</a>
+    <a href="#home-ip">知识产权维权</a>
+    <a href="#home-zhaiquan">债权追索</a>
+    <a href="#home-platform">平台应诉法律服务</a>
+  </nav>
+  <div class="practice-stage">
+  <div class="practice-deck">
+  <article class="practice-chapter" id="home-yuqing">
+    <div class="practice-frame">
+      <img src="assets/img/editorial-20261118/band-night.jpg" alt="" loading="lazy" decoding="async">
+      <div class="wrap practice-copy">
+        <h3>舆情维权</h3>
+        <p class="practice-lead">内容还没被删、证据还没丢的那几天</p>
+        <p>梳理网络内容和传播链条，固定关键证据，再由律师判断平台投诉、发函或诉讼路径。</p>
+        <a href="practice-yuqing.html">了解舆情维权 <span aria-hidden="true">↗</span></a>
       </div>
     </div>
+  </article>
+  <article class="practice-chapter" id="home-ip">
+    <div class="practice-frame">
+      <img src="assets/img/editorial-20261118/ph-ip.jpg" alt="" loading="lazy" decoding="async">
+      <div class="wrap practice-copy">
+        <h3>知识产权维权</h3>
+        <p class="practice-lead">同类侵权能不能一次性收口</p>
+        <p>围绕商标、著作权和其他知识产权，核对权利与侵权线索，研判单案处理或批量处置。</p>
+        <a href="practice-ip.html">了解知识产权维权 <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </article>
+  <article class="practice-chapter" id="home-zhaiquan">
+    <div class="practice-frame">
+      <img src="assets/img/ph-zhaiquan.jpg" alt="" loading="lazy" decoding="async">
+      <div class="wrap practice-copy">
+        <h3>债权追索</h3>
+        <p class="practice-lead">判决拿得到，钱收不收得回</p>
+        <p>核对合同、往来款项和履行记录，把追索路径与后续执行一并纳入研判。</p>
+        <a href="practice-zhaiquan.html">了解债权追索 <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </article>
+  <article class="practice-chapter" id="home-platform">
+    <div class="practice-frame">
+      <img src="assets/img/editorial-20261118/ph-platform.jpg" alt="" loading="lazy" decoding="async">
+      <div class="wrap practice-copy">
+        <h3>平台应诉法律服务</h3>
+        <p class="practice-lead">把个案沉淀成可复用的口径</p>
+        <p>从订单、交易和平台处置记录中梳理争议焦点，统筹答辩、举证与同类事项的处理。</p>
+        <a href="practice-platform.html">了解平台应诉 <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </article>
+  </div>
   </div>
 </section>
 
@@ -244,9 +288,18 @@
         <a class="focus-all" href="insights.html">全部笔记<i>→</i></a>
       </div>
       <div class="notes-list">
-        <a href="insights.html"><i>2026.10.20</i><b>网络名誉权维权：什么样的内容构成“失实”</b></a>
-        <a href="insights.html"><i>2026.09.05</i><b>批量商标侵权：什么时候调解比诉讼更划算</b></a>
-        <a href="insights.html"><i>2026.08.18</i><b>商家起诉平台时，法院在看什么</b></a>
+        <details name="home-notes">
+          <summary><time datetime="2026-10-20">2026.10.20</time><b>网络名誉权维权：什么样的内容构成“失实”</b></summary>
+          <p>这篇笔记关注事实陈述与主观评价的区别，以及它对处置路径的影响。</p>
+        </details>
+        <details name="home-notes">
+          <summary><time datetime="2026-09-05">2026.09.05</time><b>批量商标侵权：什么时候调解比诉讼更划算</b></summary>
+          <p>这篇笔记从时间、成本和执行保障三个角度比较批量案件的处理路径。</p>
+        </details>
+        <details name="home-notes">
+          <summary><time datetime="2026-08-18">2026.08.18</time><b>商家起诉平台时，法院在看什么</b></summary>
+          <p>这篇笔记关注平台规则公示、处置依据与相关程序。</p>
+        </details>
       </div>
     </div>
   </div>
@@ -262,11 +315,18 @@
     </div>
     <div class="consult-guide">
       <h3>初次沟通，可准备这些信息</h3>
-      <dl>
-        <div><dt>事情经过</dt><dd>何时发现，涉及哪个平台或交易。</dd></div>
-        <div><dt>现有材料</dt><dd>相关链接、截图、合同或平台回复。</dd></div>
-        <div><dt>处理目标</dt><dd>希望下架内容、固定证据、追回款项，或应对争议。</dd></div>
-      </dl>
+      <details name="home-consult" open>
+        <summary><strong>事情经过</strong><span>何时发现，涉及哪个平台或交易。</span></summary>
+        <p>可以按时间顺序简述发现问题、与对方沟通、平台处理的经过。</p>
+      </details>
+      <details name="home-consult">
+        <summary><strong>现有材料</strong><span>相关链接、截图、合同或平台回复。</span></summary>
+        <p>可先列出手头已有的材料，并注明来源和大致时间。</p>
+      </details>
+      <details name="home-consult">
+        <summary><strong>处理目标</strong><span>希望优先解决哪一个问题。</span></summary>
+        <p>例如下架内容、固定证据、追回款项或应对争议。如有紧迫时点，也可以一并说明。</p>
+      </details>
     </div>
   </div>
 </section>
@@ -320,7 +380,7 @@
   <a href="contact.html" class="c2">提交需求</a>
 </div>
 
-<script src="assets/main.js?v=9"></script>
-<script src="assets/interactions.js?v=9"></script>
+<script src="assets/main.js?v=15"></script>
+<script src="assets/interactions.js?v=10"></script>
 </body>
 </html>

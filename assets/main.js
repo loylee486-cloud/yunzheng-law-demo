@@ -266,10 +266,18 @@
   if (hs) {
 
     var slides = [].slice.call(hs.querySelectorAll('.hs-slide'));
-    var prev = hs.querySelector('.hs-edge-prev');
-    var nextButton = hs.querySelector('.hs-edge-next');
     var status = hs.querySelector('.hs-status');
+    var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     var idx = 0;
+    var timer = null;
+    var hovered = false;
+    var visible = !('IntersectionObserver' in window);
+
+    function scheduleRotation() {
+      clearTimeout(timer);
+      if (hovered || hs.matches(':focus-within') || !visible || document.hidden || motion.matches) return;
+      timer = setTimeout(function () { go(idx + 1, false); }, 6000);
+    }
 
     function render(previous) {
       slides.forEach(function (s, k) {
@@ -282,7 +290,7 @@
       });
     }
 
-    function go(k) {
+    function go(k, announce) {
       var next = (k + slides.length) % slides.length;
       if (next === idx) return;
       var previous = idx;
@@ -290,12 +298,31 @@
       hs.classList.add('hs-browsing');
       idx = next;
       render(previous);
-      if (focusWasInSlide && nextButton) nextButton.focus({ preventScroll: true });
-      if (status) status.textContent = slides[idx].getAttribute('aria-label');
+      if (focusWasInSlide) hs.focus({ preventScroll: true });
+      if (status && announce !== false) status.textContent = slides[idx].getAttribute('aria-label');
+      scheduleRotation();
     }
 
-    if (prev) prev.addEventListener('click', function () { go(idx - 1); });
-    if (nextButton) nextButton.addEventListener('click', function () { go(idx + 1); });
+    hs.addEventListener('focusin', scheduleRotation);
+    hs.addEventListener('focusout', function () { requestAnimationFrame(scheduleRotation); });
+    hs.addEventListener('pointerenter', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      hovered = true;
+      scheduleRotation();
+    });
+    hs.addEventListener('pointerleave', function () {
+      hovered = false;
+      scheduleRotation();
+    });
+    if ('IntersectionObserver' in window) {
+      var rotationObserver = new IntersectionObserver(function (entries) {
+        visible = entries[0].intersectionRatio >= .5;
+        scheduleRotation();
+      }, { threshold: .5 });
+      rotationObserver.observe(hs);
+    }
+    document.addEventListener('visibilitychange', scheduleRotation);
+    motion.addEventListener('change', scheduleRotation);
     hs.addEventListener('keydown', function (e) {
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
       if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
@@ -318,77 +345,100 @@
     }, { passive: true });
 
     render();
+    scheduleRotation();
   }
 })();
 
-/* 桌面配图跟随阅读位置；手机将配图放在各业务链接内。 */
+/* 阅读区停在视口，由原生滚动推进画面；锚点可跳到对应的阅读段。 */
 (function () {
-  var wrapEl = document.querySelector('.focus-list');
-  if (!wrapEl) return;
-  var items = Array.prototype.slice.call(wrapEl.querySelectorAll('.fl'));
-  var stage = Array.prototype.slice.call(document.querySelectorAll('.focus-stage .fs'));
-  var caption = document.querySelector('.focus-caption');
-  if (!items.length || items.length !== stage.length || !caption) return;
+  var section = document.getElementById('home-practice');
+  if (!section) return;
+  var index = section.querySelector('.practice-index');
+  var stage = section.querySelector('.practice-stage');
+  var deck = stage.querySelector('.practice-deck');
+  var header = document.querySelector('header.nav');
+  var links = Array.from(index.querySelectorAll('a[href^="#"]'));
+  var chapters = links.map(function (link) { return document.getElementById(link.hash.slice(1)); });
+  var pinned = window.matchMedia('(min-height: 540px) and (prefers-reduced-motion: no-preference)');
+  var markers = [];
+  var current = -2;
+  var shown = -1;
+  var frame = 0;
 
-  var desktop = window.matchMedia('(min-width: 961px)');
-  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var active = 0, hovered = null, focused = null, frame = 0;
-  function set(i) {
-    if (active === i) return;
-    active = i;
-    items.forEach(function (el, k) { el.classList.toggle('on', k === i); });
-    stage.forEach(function (el, k) { el.classList.toggle('on', k === i); });
-    caption.textContent = items[i].querySelector('b').textContent;
+  function renderScene(next) {
+    if (next === shown) return;
+    var previous = shown;
+    shown = next;
+    chapters.forEach(function (chapter, i) {
+      chapter.classList.toggle('is-current', i === shown);
+      chapter.classList.toggle('is-outgoing', i === previous);
+      chapter.inert = i !== shown;
+    });
   }
 
   function update() {
     frame = 0;
-    if (!desktop.matches) return;
-    if (focused !== null || hovered !== null) {
-      set(focused !== null ? focused : hovered);
-      return;
+    var headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+    var next = -1;
+    if (markers.length) {
+      var pinTop = headerBottom + index.offsetHeight;
+      section.style.setProperty('--practice-index-height', index.offsetHeight + 'px');
+      markers.forEach(function (marker, i) {
+        if (marker.getBoundingClientRect().top <= pinTop + 2) next = i;
+      });
+      renderScene(Math.max(0, next));
+      if (stage.getBoundingClientRect().bottom <= pinTop) next = -1;
+    } else {
+      var readingLine = headerBottom + (innerHeight - headerBottom) * .33;
+      chapters.forEach(function (chapter, i) {
+        var bounds = chapter.getBoundingClientRect();
+        if (bounds.top <= readingLine && bounds.bottom > readingLine) next = i;
+      });
     }
-    if (reducedMotion.matches) return;
-    var readingLine = window.innerHeight * .53;
-    var bounds = wrapEl.getBoundingClientRect();
-    if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
-    var index = 0;
-    items.forEach(function (item, i) {
-      if (item.getBoundingClientRect().top <= readingLine) index = i;
+    if (next === current) return;
+    current = next;
+    links.forEach(function (link, i) {
+      if (i === current) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
     });
-    set(index);
   }
 
-  function schedule() {
+  function scheduleUpdate() {
     if (!frame) frame = requestAnimationFrame(update);
   }
 
-  function addMobilePhotos() {
-    if (desktop.matches) return;
-    items.forEach(function (item, i) {
-      if (item.querySelector('.focus-thumb')) return;
-      var img = stage[i].querySelector('img').cloneNode();
-      img.className = 'focus-thumb';
-      img.alt = '';
-      item.appendChild(img);
-    });
+  function setLayout() {
+    if (pinned.matches && !markers.length) {
+      markers = chapters.map(function (chapter, i) {
+        var marker = document.createElement('span');
+        marker.className = 'practice-marker';
+        marker.id = chapter.id;
+        marker.style.setProperty('--chapter-index', i);
+        chapter.removeAttribute('id');
+        deck.before(marker);
+        return marker;
+      });
+      section.classList.add('practice-pinned');
+      renderScene(0);
+    } else if (!pinned.matches && markers.length) {
+      chapters.forEach(function (chapter, i) {
+        chapter.id = markers[i].id;
+        markers[i].remove();
+        chapter.inert = false;
+        chapter.classList.remove('is-current', 'is-outgoing');
+      });
+      section.classList.remove('practice-pinned');
+      markers = [];
+      shown = -1;
+    }
+    update();
   }
 
-  items.forEach(function (el, i) {
-    el.addEventListener('pointerenter', function (e) {
-      if (e.pointerType !== 'mouse') return;
-      hovered = i;
-      schedule();
-    });
-    el.addEventListener('pointerleave', function () { hovered = null; schedule(); });
-    el.addEventListener('focus', function () { focused = i; schedule(); });
-    el.addEventListener('blur', function () { focused = null; schedule(); });
-  });
-  addMobilePhotos();
-  desktop.addEventListener('change', addMobilePhotos);
-  window.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', schedule, { passive: true });
-  schedule();
+  window.addEventListener('scroll', scheduleUpdate, { passive: true });
+  window.addEventListener('resize', scheduleUpdate);
+  window.addEventListener('pageshow', scheduleUpdate);
+  pinned.addEventListener('change', setLayout);
+  setLayout();
 })();
 
 /* 章程首屏（简介页）：逐字入场 + 细线展开。无 JS 时文字保持原样可见 */

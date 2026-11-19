@@ -7,15 +7,17 @@
     var sectionObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
-        entry.target.classList.add('section-in-view');
+        entry.target.classList.add(entry.target.hasAttribute('data-enter') ? 'section-in-view' : 'item-in-view');
         sectionObserver.unobserve(entry.target);
       });
     }, { rootMargin: '0px 0px -7% 0px' });
     document.querySelectorAll('body > section:not(.page-hero):not(#heroSlider)').forEach(function (section) {
+      var items = section.querySelectorAll('.notes-list > details, .case-grid > *, .navcards > *, .faq > details');
       if (section.matches('.pb, .ab-quote.has-photo, .ab-band.has-photo, .ab-split, .consult-closing')) {
         section.dataset.enter = 'media';
-      } else if (section.querySelector('.focus-list, .notes-list, .case-grid, .navcards, .chain, .faq')) {
+      } else if (items.length || section.querySelector('.focus-list, .chain')) {
         section.dataset.enter = 'sequence';
+        items.forEach(function (item) { sectionObserver.observe(item); });
       } else {
         section.dataset.enter = 'text';
       }
