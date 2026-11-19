@@ -1,0 +1,40 @@
+/* 简介页沿用全站实景首屏、白底蓝字与公共内容区，仅补充简介排版。 */
+body.about-light{background:#fff;color:var(--ink)}
+.about-overview{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:72px;align-items:start}
+.about-mission .blk-head{margin-bottom:28px}
+.about-mission .blk-head h2{color:var(--navy)}
+.about-mission .blk-head p{font-size:15px;line-height:1.95}
+.about-facts{margin:0 0 30px;border-top:1px solid var(--line)}
+.about-facts>div{display:grid;grid-template-columns:56px minmax(0,1fr);gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}
+.about-facts dt{font-size:12px;color:var(--muted)}
+.about-facts dd{margin:0;font-size:14px;color:var(--ink);line-height:1.8}
+.about-mission .acts{display:flex;gap:14px;flex-wrap:wrap}
+.about-principles{padding:32px;background:var(--soft);border-top:2px solid var(--gold)}
+.about-vision h3{font-size:22px;font-weight:500;line-height:1.8;color:var(--navy)}
+.about-values{margin-top:30px;padding-top:24px;border-top:1px solid var(--line)}
+.about-values ul{display:flex;flex-wrap:wrap;gap:10px 24px;list-style:none;padding:0;margin:0;color:var(--navy);font-size:15px}
+body.about-light .ab2{display:grid;grid-template-columns:minmax(0,.46fr) minmax(0,1fr);gap:72px;align-items:start}
+body.about-light .ab2-n{display:block;font-size:12px;letter-spacing:.16em;color:var(--gold)}
+body.about-light .ab2-side h2{margin:14px 0 0;font-size:27px;line-height:1.5;font-weight:600;color:var(--navy)}
+body.about-light .ab2-main p{margin:0;color:var(--muted);font-size:15px;line-height:1.95}
+body.about-light .steps{margin-top:30px;border-top:1px solid var(--line)}
+body.about-light .step{display:grid;grid-template-columns:36px 116px minmax(0,1fr);gap:20px;align-items:baseline;padding:22px 0;border-bottom:1px solid var(--line)}
+body.about-light .step i{font-style:normal;font-size:12px;letter-spacing:.12em;color:var(--gold)}
+body.about-light .step b{font-size:15.5px;font-weight:600;color:var(--navy)}
+body.about-light .step span{font-size:14px;line-height:1.9;color:var(--muted)}
+body.about-light .ab-split .ab-txt{display:flex;flex-direction:column;justify-content:center}
+body.about-light .ab-split .lead+.lead{margin-top:15px}
+@media(max-width:960px){
+  .about-overview,body.about-light .ab2{grid-template-columns:1fr;gap:32px}
+  .about-principles{padding:26px}
+  .about-vision h3{font-size:20px}
+  body.about-light .step{grid-template-columns:32px 116px minmax(0,1fr);gap:16px}
+}
+@media(max-width:520px){
+  .about-facts>div{grid-template-columns:38px minmax(0,1fr);gap:14px}
+  .about-principles{padding:24px}
+  .about-vision h3{font-size:19px}
+  .about-values ul{gap:10px 18px;font-size:14px}
+  body.about-light .step{grid-template-columns:28px minmax(0,1fr);gap:4px 14px;padding:19px 0}
+  body.about-light .step span{grid-column:2}
+}
