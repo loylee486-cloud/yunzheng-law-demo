@@ -272,18 +272,21 @@
     var position = hs.querySelector('.hs-position');
     var positionButtons = position ? Array.from(position.querySelectorAll('button')) : [];
     var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    var autoDelay = 5400; // 文案入场约 1.4 秒，留 4 秒阅读。
-    var manualDelay = autoDelay + 2000;
+    var readingTime = 2000;
     var idx = 0;
     var timer = null;
-    var manualUntil = 0;
+    var arrival;
+    var rotationVersion = 0;
     var visible = !('IntersectionObserver' in window);
 
     function scheduleRotation() {
       clearTimeout(timer);
+      var version = ++rotationVersion;
       // 鼠标停在画面上仍可观看轮播；键盘阅读链接时保留当前画面。
       if (hs.querySelector('a:focus-visible') || !visible || document.hidden || motion.matches) return;
-      timer = setTimeout(function () { go(idx + 1, false); }, Math.max(autoDelay, manualUntil - Date.now()));
+      arrival.then(function () {
+        if (version === rotationVersion) timer = setTimeout(function () { go(idx + 1, false); }, readingTime);
+      });
     }
 
     function render(previous) {
@@ -299,11 +302,15 @@
         if (button.getAttribute('aria-controls') === slides[idx].id) button.setAttribute('aria-current', 'true');
         else button.removeAttribute('aria-current');
       });
+      // 操作链接最后入场，完成后开始两秒的阅读计时。
+      var actions = slides[idx].querySelector('.hs-acts');
+      arrival = actions.getAnimations
+        ? Promise.allSettled(actions.getAnimations().map(function (animation) { return animation.finished; }))
+        : new Promise(function (resolve) { setTimeout(resolve, 1380); });
     }
 
     function go(k, announce) {
       var next = (k + slides.length) % slides.length;
-      if (announce !== false) manualUntil = Date.now() + manualDelay;
       if (next === idx) {
         scheduleRotation();
         return;
