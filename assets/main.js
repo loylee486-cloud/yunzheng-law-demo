@@ -267,16 +267,23 @@
 
     var slides = [].slice.call(hs.querySelectorAll('.hs-slide'));
     var status = hs.querySelector('.hs-status');
+    var previousButton = hs.querySelector('.hs-edge-prev');
+    var nextButton = hs.querySelector('.hs-edge-next');
+    var position = hs.querySelector('.hs-position');
+    var positionButtons = position ? Array.from(position.querySelectorAll('button')) : [];
     var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var autoDelay = 5400; // 文案入场约 1.4 秒，留 4 秒阅读。
+    var manualDelay = autoDelay + 2000;
     var idx = 0;
     var timer = null;
+    var manualUntil = 0;
     var visible = !('IntersectionObserver' in window);
 
     function scheduleRotation() {
       clearTimeout(timer);
       // 鼠标停在画面上仍可观看轮播；键盘阅读链接时保留当前画面。
       if (hs.querySelector('a:focus-visible') || !visible || document.hidden || motion.matches) return;
-      timer = setTimeout(function () { go(idx + 1, false); }, 6000);
+      timer = setTimeout(function () { go(idx + 1, false); }, Math.max(autoDelay, manualUntil - Date.now()));
     }
 
     function render(previous) {
@@ -288,11 +295,19 @@
         if (on) s.removeAttribute('aria-hidden');
         else s.setAttribute('aria-hidden', 'true');
       });
+      positionButtons.forEach(function (button) {
+        if (button.getAttribute('aria-controls') === slides[idx].id) button.setAttribute('aria-current', 'true');
+        else button.removeAttribute('aria-current');
+      });
     }
 
     function go(k, announce) {
       var next = (k + slides.length) % slides.length;
-      if (next === idx) return;
+      if (announce !== false) manualUntil = Date.now() + manualDelay;
+      if (next === idx) {
+        scheduleRotation();
+        return;
+      }
       var previous = idx;
       var focusWasInSlide = slides[previous].contains(document.activeElement);
       hs.classList.add('hs-browsing');
@@ -303,6 +318,20 @@
       scheduleRotation();
     }
 
+    if (previousButton && nextButton) {
+      previousButton.hidden = false;
+      nextButton.hidden = false;
+      previousButton.addEventListener('click', function () { go(idx - 1); });
+      nextButton.addEventListener('click', function () { go(idx + 1); });
+    }
+    if (position) {
+      positionButtons.forEach(function (button) {
+        var target = slides.findIndex(function (slide) { return slide.id === button.getAttribute('aria-controls'); });
+        if (target !== -1) button.addEventListener('click', function () { go(target); });
+      });
+      position.hidden = false;
+      hs.classList.add('hs-has-position');
+    }
     hs.addEventListener('focusin', scheduleRotation);
     hs.addEventListener('focusout', function () { requestAnimationFrame(scheduleRotation); });
     if ('IntersectionObserver' in window) {
@@ -319,6 +348,7 @@
       if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
       e.preventDefault();
       go(idx + (e.key === 'ArrowRight' ? 1 : -1));
+      if (positionButtons.includes(e.target)) position.querySelector('[aria-current="true"]')?.focus({ preventScroll: true });
     });
     var touchStart = null;
     hs.addEventListener('touchstart', function (e) {

@@ -69,7 +69,7 @@
   ]
 }
 </script>
-<link rel="stylesheet" href="assets/interactions.css?v=16">
+<link rel="stylesheet" href="assets/interactions.css?v=18">
 <link rel="stylesheet" href="assets/refinement.css?v=2">
 </head>
 <body>
@@ -116,7 +116,12 @@
 
 
 <section class="hs" id="heroSlider" role="region" aria-roledescription="carousel" aria-label="云拯律师事务所首页轮播" tabindex="0">
-  <div class="hs-track">
+  <div class="hs-position" role="group" aria-label="首屏三组内容" hidden>
+    <button type="button" aria-controls="scene-network" aria-current="true">网络侵权</button>
+    <button type="button" aria-controls="scene-method">办案方式</button>
+    <button type="button" aria-controls="scene-hangzhou">立足杭州</button>
+  </div>
+  <div class="hs-track" id="hero-scenes">
 
     <article class="hs-slide is-active" id="scene-network" role="group" aria-roledescription="场景" aria-label="网络侵权">
       <div class="hs-media">
@@ -171,6 +176,12 @@
 
   </div>
 
+  <button class="hs-edge hs-edge-prev" type="button" aria-label="上一张" aria-controls="hero-scenes" hidden>
+    <span aria-hidden="true"></span>
+  </button>
+  <button class="hs-edge hs-edge-next" type="button" aria-label="下一张" aria-controls="hero-scenes" hidden>
+    <span aria-hidden="true"></span>
+  </button>
   <span class="hs-status" role="status"></span>
   <div class="hs-utilities">
     <a class="hs-read" href="#home-intro">向下阅读 <span aria-hidden="true">↓</span></a>
@@ -380,7 +391,7 @@
   <a href="contact.html" class="c2">提交需求</a>
 </div>
 
-<script src="assets/main.js?v=16"></script>
+<script src="assets/main.js?v=18"></script>
 <script src="assets/interactions.js?v=10"></script>
 </body>
 </html>
